@@ -26,7 +26,7 @@ def scrap_hidden_directory(url, base_url, counter):
                 return flag
     return None
 
-start_url = "http://192.168.1.15/.hidden/"
+start_url = "http://x.x.x.x/.hidden/"
 counter = [0]
 flag = scrap_hidden_directory(start_url, start_url, counter)
 print("\n" + (flag if flag else "Flag not found"))

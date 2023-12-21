@@ -1,0 +1,5 @@
+# Explanation
+A Python script is used to explore the `/.hidden` directory discovered through the site's `/robots.txt`. The script, utilizing `requests`, `BeautifulSoup`, and regular expressions, recursively navigates through subdirectories, examining the contents of README files for a specific hexadecimal pattern. Messages containing this pattern are displayed in the console. Ensure to modify the IP in the script, activate a virtual environment (venv) with `source venv/bin/activate`, and install the dependencies listed in `requirements.txt` using `pip install -r requirements.txt`.
+
+# How to Prevent This
+To hinder such automated exploration, avoid listing sensitive directories in `robots.txt`. Implement server-side checks and access controls to restrict unauthorized traversal and scraping of directories. This enhances security against automated data extraction methods.

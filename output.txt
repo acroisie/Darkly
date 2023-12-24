@@ -1,0 +1,110 @@
+Displaying contents of: ./Data Recovery Exploit/Ressources/Data Recovery Exploit.md
+# Explanation
+
+If you're on the home page, click on 'Sign in,' and then select 'I forgot my password.'
+
+You'll be taken to the password recovery page (/?page=recover).
+
+By looking at the page's code, you'll find a form connected to the 'SUBMIT' button:
+```
+<form action="#" method="POST">
+	<input type="hidden" name="mail" value="webmaster@borntosec.com" maxlength="15">
+	<input type="submit" name="Submit" value="Submit">
+</form>
+```
+Inside this form, there's a hidden field containing the email address for password recovery.
+
+This means you can change the email address by modifying the input value. Afterward, simply click the 'SUBMIT' button to reveal the flag.
+
+# How to prevent this?
+
+The best way to avoid such issues is to handle sensitive information on the backend of the system, rather than in the front-end code.Displaying contents of: ./Bruteforce/Ressources/ Bruteforce.md
+# Explanation
+This exploit, known as a "Brute Force Attack," involves systematically checking all possible passwords until the correct one is found. It is a straightforward yet time-consuming approach that relies on trial and error. For this specific case, the attack was focused on the SignIn page (`http://192.168.1.32/?page=signin`) of a web application. Commonly used passwords, often found in publicly available lists, were utilized in the script to attempt login with username as `admin`. By iterating through a list of the top 25 most used passwords, the script attempts to gain unauthorized access to the system.
+
+# How to Prevent This
+Brute force attacks exploit the number of attempts made: the more attempts, the higher the chances of success. To mitigate such attacks, limit the number of login attempts within a certain time frame. Implementing account lockout policies or progressively delaying response time after failed attempts can be effective. Additionally, enforcing complex passwords significantly increases the number of attempts required, reducing the feasibility of brute force attacks. It's essential to balance security measures with user convenience to ensure a secure yet user-friendly system.Displaying contents of: ./SQL Injection (Basic)/Ressources/SQL Injection (Basic).md
+# Explanation
+
+The image search page of the website was vulnerable to SQL injection, a common security flaw in web applications. The exploit was executed by injecting the SQL statement `1 OR 1=1 UNION SELECT table_name, column_name FROM information_schema.columns` into the search input. This injection revealed the structure of the database by listing all tables and their columns.
+
+Further exploration was done using `1 OR 1=1 UNION SELECT title, comment FROM list_images`, which extracted data from the 'list_images' table, specifically the 'title' and 'comment' columns. This led to finding a critical comment: "If you read this just use this md5 decode lowercase then sha256 to win this flag ! : 1928e8083cf461a51303633093573c46". Decoding this MD5 hash revealed the word "albatroz", which, when processed through SHA256, provided the final flag.
+
+# How to Prevent This
+
+Preventing SQL injections involves securing the backend user input processing. Key practices include:
+
+- **Input Sanitization**: Ensure inputs are properly sanitized to prevent the insertion of malicious SQL code.
+- **Use of Prepared Statements**: Implement prepared statements to separate SQL logic from user data.
+- **Leverage Framework Security Features**: Many modern frameworks have built-in functions to protect against SQL injections.
+
+By incorporating these security measures, SQL injection vulnerabilities can be significantly reduced.Displaying contents of: ./Spoofing with Curl/Ressources/Spoofing with Curl.md
+# Explanation
+This exploit, identified as "HTTP Header Spoofing," involves modifying HTTP request headers to bypass security checks and gain unauthorized access. It was discovered by examining the main page's source code, where hidden instructions in HTML comments hinted at the requirements for accessing a restricted page. The instructions suggested altering the `Referer` and `User-Agent` headers. The server expects a `Referer` header indicating the request originated from "https://www.nsa.gov/" and a custom `User-Agent` named "ft_bornToSec." To simulate these conditions and access the restricted content, a `curl` command can be used:
+
+```bash
+curl -e "https://www.nsa.gov/" -A "ft_bornToSec" "http://x.x.x.x/?page=b7e44c7a40c5f80139f0a50f3650fb2bd8d00b0d24667c4c2ca32c88e13b758f" | grep flag
+```
+
+This command sets the required `Referer` and `User-Agent` headers, potentially revealing sensitive information or a flag upon successful execution.
+
+# How to Prevent This
+Relying solely on `Referer` and `User-Agent` headers for security is inadequate, as these can be easily spoofed. To enhance security, implementing additional verification methods, such as multi-factor authentication, is advisable. This approach requires users to provide multiple forms of identification, significantly reducing the likelihood of unauthorized access through simple header manipulation.Displaying contents of: ./Guessing Hidden Files/Ressources/Guessing Hidden Files.md
+# Explanation
+A Python script is used to explore the `/.hidden` directory discovered through the site's `/robots.txt`. The script, utilizing `requests`, `BeautifulSoup`, and regular expressions, recursively navigates through subdirectories, examining the contents of README files for a specific hexadecimal pattern. Messages containing this pattern are displayed in the console. Ensure to modify the IP in the script, activate a virtual environment (venv) with `source venv/bin/activate`, and install the dependencies listed in `requirements.txt` using `pip install -r requirements.txt`.
+
+# How to Prevent This
+To hinder such automated exploration, avoid listing sensitive directories in `robots.txt`. Implement server-side checks and access controls to restrict unauthorized traversal and scraping of directories. This enhances security against automated data extraction methods.Displaying contents of: ./Cookie Manipulation/Ressources/Cookie Manipulation.md
+# Explanation
+
+Examine the browser cookies, specifically the "I_am_admin" field with its MD5 value. Decrypt this value using [md5decrypt.net](https://md5decrypt.net). The MD5 hash "68934a3e9455fa72420237eb05902327" translates to "false". Exploit this by encrypting "true" into MD5 ("b326b5062b2f0e69046810717534cb09") and updating the cookie. Reload the website to access admin privileges and obtain the flag.
+
+# Patch
+
+Do not trust cookie contents for sensitive operations. Avoid MD5 for encryption; instead, use stronger algorithms like bcrypt for better security.Displaying contents of: ./Survey/Ressources/Survey.md
+# Explanation
+
+On the survey page, users can vote for individuals, assigning points from 1 to 10. The vulnerability is in the dropdown selection for voting:
+
+```html
+<select name="valeur" onchange="javascript:this.form.submit();">
+	<option value="1">1</option>
+	...
+	<option value="10">10</option>
+</select>
+```
+
+An attacker can modify the `value` attribute of the `option` tags to an arbitrary number, manipulating the total points.
+
+# How to Prevent This
+
+To prevent this exploit, the backend should validate the submitted vote values, ensuring they are strictly within 1 to 10. This check avoids the submission of inflated vote counts.Displaying contents of: ./Admin Access via Htpasswd/Ressources/Admin Access via Htpasswd.md
+# Explanation
+Upon inspecting the site's `robots.txt`, a `/whatever` link was discovered, leading to a file containing an MD5 encrypted password. By decrypting this password and combining it with the corresponding ID, access to the `/admin` page was achieved, revealing the flag. It's essential to securely encrypt sensitive data like passwords and restrict access to administrative areas of websites.
+
+# How to Prevent This
+To prevent unauthorized access, avoid listing sensitive paths in `robots.txt` and ensure robust encryption methods are in place for passwords. Implementing multi-factor authentication and limiting exposure of administrative URLs enhances security against unauthorized access and data breaches.Displaying contents of: ./XSS (Cross-Site Scripting) Basic/Ressources/XSS (Cross-Site Scripting) Basic.md
+# Explanation
+
+The exploit involves injecting a script through a Data URI in a `src` parameter. First, write your script, like `<script>alert('toto')</script>`. Then, encode this script into Base64. You can use [Base64 Encode](https://www.base64encode.org) for encoding. The encoded script is placed in a Data URI: `data:text/html;base64,[Encoded Script]`. Finally, inject this Data URI into the `src` parameter of the vulnerable webpage.
+
+# How to Prevent This
+
+Validate and sanitize input parameters to prevent the inclusion of external or encoded scripts. Use backend verification to ensure only intended content is processed.Displaying contents of: ./Directory Traversal/Ressources/Directory_traversal.md
+# Explanation
+The "Directory Traversal" exploit involves manipulating web application URLs to access unauthorized files. By altering the URL parameter (`page`), users can navigate the server's directory structure. An example is accessing the Unix system file `/etc/passwd` via a URL like `http://x.x.x.x/?page=../../../../../../../etc/passwd`. This exploit is often successful due to insufficient validation of user inputs that influence file paths.
+
+# How to Prevent This
+To prevent Directory Traversal:
+- Validate and sanitize user inputs that affect file paths.
+- Use secure file serving methods that do not expose direct filesystem paths.
+- Restrict server file permissions and implement server-side directory access checks.
+
+This exploit aligns with the "Guess (hidden file)" item from your initial exploit list. It capitalizes on guessing or discovering files typically hidden from web users.Displaying contents of: ./Redirection Vulnerability/Ressources/Redirection Vulnerability.md
+# Explanation
+
+On the homepage, find the link to social media redirects, such as `index.php?page=redirect&site=facebook`. By altering the URL parameter (`site=`), you can redirect to any chosen site. For example, change it to `index.php?page=redirect&site=[malicious-site]`. Sharing this URL can mislead others into visiting a harmful site instead of the intended social media page.
+
+# How to Prevent This
+
+To prevent such vulnerabilities, validate and restrict external URL inputs on the server side. Ensure only legitimate sites like Facebook or Twitter are allowed as redirection targets. This approach prevents attackers from using the website's functionality to redirect users to malicious sites.

@@ -1,4 +1,4 @@
-# SQL Injection (Advanced).md
+# Explanation
 
 This README explains an advanced SQL injection on a member search page. Like basic SQL injection, this exploit reveals database structure and data through crafted inputs. The process starts with `1 OR 1=1 UNION SELECT table_name, column_name FROM information_schema.columns` to identify table fields. Then, it targets the `users` table to extract the `Commentaire` and `countersign` columns using `1 OR 1=1 UNION SELECT Commentaire, countersign from users`.
 

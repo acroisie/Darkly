@@ -1,4 +1,5 @@
 # Explanation
+Go to footer borntosec
 This exploit, identified as "HTTP Header Spoofing," involves modifying HTTP request headers to bypass security checks and gain unauthorized access. It was discovered by examining the main page's source code, where hidden instructions in HTML comments hinted at the requirements for accessing a restricted page. The instructions suggested altering the `Referer` and `User-Agent` headers. The server expects a `Referer` header indicating the request originated from "https://www.nsa.gov/" and a custom `User-Agent` named "ft_bornToSec." To simulate these conditions and access the restricted content, a `curl` command can be used:
 
 ```bash

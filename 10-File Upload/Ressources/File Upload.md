@@ -1,4 +1,4 @@
-"# File Upload Issue
+# File Upload Issue
 
 When you upload a file, there is a risk. A PHP file might be uploaded pretending to be an image. The attack involves making a PHP script (/tmp/bad.php) with this content <?php echo "This is a poor upload check..." ?>. To get past security, this file is uploaded using curl with the 'Content-Type' header set as 'image/jpeg'. The command for this is:
 Here's the command that accomplishes this:
